@@ -1,4 +1,5 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import './App.css';
 
 
@@ -10,11 +11,16 @@ interface IAppOwnProps  {
 const App : React.FC<IAppOwnProps> =({username, userType}) : JSX.Element => {
   const [time, setTime] = useState<Date>(()=>new Date(Date.now()))
   const [message, setMessage] = useState<string>('')
-  
-  
-  setInterval(()=>{
+ useEffect  (()=>{
+    console.log("rendering")
+      const timer =  setInterval(()=>{
+        console.log("in set interval")
       setTime(new Date(Date.now()))
-  }, 100)
+  }, 100);
+
+    return () => { clearInterval(timer)}
+
+  }, [username]) 
 
   const handleTextChange = (event : ChangeEvent<HTMLInputElement>) : void =>{
 
@@ -37,6 +43,7 @@ const App : React.FC<IAppOwnProps> =({username, userType}) : JSX.Element => {
       <p>
         Your message: {message || ''}
       </p>
+      <Link to="/userlist">User List</Link>
     </div>
   );
 }
